@@ -1,0 +1,163 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage[a4paper,top=2.5cm,bottom=2.5cm,left=1.55cm,right=1.55cm,marginparwidth=1.0cm]{geometry}
+\usepackage{xcolor}
+\usepackage{lastpage}
+\usepackage{datetime}
+
+% -- Useful packages
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage[none]{hyphenat}\hyphenpenalty=10000\tolerance=500
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}\pagestyle{fancy}\fancyhf{}\lhead{{PolyModels Hub Confidential}}\rhead{Milling - E2E Model Development}\cfoot{Page \thepage \,\,of \pageref{LastPage}}
+
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}\setlength{\parindent}{0em}
+\usepackage{upgreek}
+\usepackage{mathrsfs}
+\usepackage{float}
+\usepackage[]{hyperref}
+\hypersetup{linkcolor=black}
+% Define a new page style for the first page
+\fancypagestyle{firstpage}{
+  \fancyhf{} % clear all header and footer fields
+  \renewcommand{\headrulewidth}{0pt} % remove header line
+  \renewcommand{\footrulewidth}{0pt} % remove footer line
+}
+
+% Uncomment the following line for dark mode in pdf
+% \usepackage{xcolor} \pagecolor[rgb]{0,0,0} \color[rgb]{1,1,1}
+
+%------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+% Main document starts here:
+%------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+\begin{document}
+\thispagestyle{firstpage}
+\vspace*{-0.9cm}
+\begin{minipage}{0.9\textwidth}
+    {\huge \color{blue} PolyModels Hub Ltd}
+    \\
+    \vspace{-0.15cm}
+
+    71-75 Shelton Street
+    \\
+    London, WC2H 9JQ
+    \\
+    Company No. 14882310
+    \\
+    info@polymodelshub.com
+    \\
+\end{minipage}
+\begin{minipage}{0.115\textwidth}
+    \begin{figure}[H]
+        \vspace{-0.5cm}\includegraphics[width=\textwidth]{PMHlogo.png}
+    \end{figure}
+\end{minipage}
+\vspace{0.5cm}
+
+\begin{minipage}{1\textwidth}
+    \textbf{Report name}: \textcolor{blue}{ \large PMH Internal: Approach to solving PDE problems} \\
+    \textbf{Report ID}: \textcolor{blue}{ CDCLINE\_01 }\\
+
+\end{minipage}%
+
+\vspace{0.0cm}
+
+\noindent
+\textbf{Last updated}: \today\\
+\textbf{Authored by}: Samuel Andersson\\
+\textbf{Reviewed by}: -\\
+
+\vspace{0.5cm}
+
+
+\rule{\textwidth}{0.1pt}
+
+
+\begin{center} \textbf{{\large Report Summary}} \end{center}
+
+In this report, we present approaches to solving types of PDE problems that are common in the pharmaceutical industry, comparing them in 3 principle aspects: ease of implementation, computational efficiency and accuracy.
+First, we present a simple PDE problem that is representative of a common pharmaceutical process, the residence time distribution in a continuous powder mixer. We then move on to more complex problems, such as the fluid flow in a packed bed, and the diffusion of a solute through a liquid.
+Then we compare computational implementations of these problems in a couple of software packages: py-pde, Scipy FDiff, PyClaw, and MoL.jl.
+
+
+\rule{\textwidth}{0.1pt}
+
+\vspace{1cm}
+
+{\center{\textbf{\large Table of Contents}}
+    \vspace*{-1.3cm}
+    \renewcommand\contentsname{}
+    \addcontentsline{}{}{}
+    \addtocontents{toc}{~\hfill\textbf{Page}\par}
+
+    \tableofcontents
+}
+
+\newpage{}
+
+\section{Problem Sets}
+\subsection{Feeder: Advection-Diffusion}
+\subsubsection{V1: single pde}
+\subsubsection{V2: coupled pde and ode}
+\subsection{Fixed Bed Incompressible Fluid: Advection-Diffusion-Sorption}
+\subsubsection{V1: coupled pdes}
+\subsubsection{V2: coupled pde and ode}
+\subsection{Fixed Bed Compressible Fluid: Advection-Diffusion-Sorption}
+
+\section{Software Libraries}
+\subsection{Py-PDE}
+\subsection{Scipy FDiff}
+\subsection{PyClaw}
+\subsection{MoL.jl}
+
+\section{Solving PDEs}
+\subsection{Frameworks}
+\subsubsection{Method of Lines}
+
+\subsection{Methods}
+\subsubsection{Finite Difference}
+\subsubsection{Finite Volume}
+\subsubsection{Finite Element}
+\subsubsection{Orthogonal Collocation}
+\subsubsection{Other}
+
+\newpage{}
+\appendix
+\section{Hopper Balance Equation}
+\label{sec:hopper_balance}
+Starting from the PFR mass balance equation
+\begin{equation}
+    \frac{\partial f}{\partial t} = - v(t)\frac{\partial f}{\partial x} + D\frac{\partial^2 f}{\partial z^2}
+\end{equation}
+we replace the spatial dimension with a normalized coordinate $x = z/L(t)$ where $L$ is the material holdup height in the hopper. We call $g$ the function obtained from $f$ by replacing variable $z$ with $x$. We can then write the following equalities
+
+\begin{equation}
+    \label{eq:pfr}
+    \begin{split}
+        \frac{\partial f(z, t)}{\partial z}     & = \frac{\partial g(x, t)}{\partial z}                                                                                     \\
+                                                & = \frac{\partial g(x, t)}{\partial x} \frac{\partial x}{\partial z}                                                       \\
+                                                & = \frac{1}{L(t)}\frac{\partial g(x, t)}{\partial x}                                                                       \\ & \\
+        \frac{\partial^2 f(z, t)}{\partial z^2} & = \frac{1}{L(t)}\frac{\partial^2 g(x, t)}{\partial x \partial z}                                                          \\
+                                                & = \frac{1}{L(t)^2}\frac{\partial^2 g(x, t)}{\partial x^2}                                                                 \\ &\\
+        \frac{\partial f(z, t)}{\partial t}     & = \frac{dg(x, t)}{dt}                                                                                                     \\
+                                                & = \frac{\partial g(x, t)}{ \partial t} + \frac{\partial g(x, t)}{\partial x}\frac{\partial x}{\partial t}                 \\
+                                                & = \frac{\partial g(x, t)}{ \partial t} + \frac{\partial g(x, t)}{\partial x} \bigg(-\frac{1}{L(t)}x\frac{dL(t)}{dt}\bigg)
+    \end{split}
+\end{equation}
+
+The final equation with boundary immobilized is obtained by replacing the partial derivatives in Equation \ref{eq:pfr} with the $g$ dependent expression according to the above equalities.
+
+\begin{equation}
+    \frac{\partial g}{\partial t} = - \frac{1}{L(t)}\bigg(v(t) - x\frac{dL(t)}{dt}\bigg)\frac{\partial g}{\partial x} + \frac{D}{L(t)^2}\frac{\partial^2 g}{\partial x^2}; \quad x \in [0, 1]
+\end{equation}
+
+\newpage{}
+\bibliographystyle{apalike}
+\bibliography{references}
+
+
+
+\end{document}
