@@ -9,7 +9,11 @@ juliapkg.resolve()
 
 # List of packages to include in the JSON
 packages_to_include = [
-    "DifferentialEquations"
+    "DifferentialEquations",
+    "MethodOfLines",
+    "DomainSets",
+    "ModelingToolkit",
+    "OrdinaryDiffEq"
 
 ]
 

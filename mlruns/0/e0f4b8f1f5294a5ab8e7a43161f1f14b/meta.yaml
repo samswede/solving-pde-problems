@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/e0f4b8f1f5294a5ab8e7a43161f1f14b/artifacts
+end_time: 1726325267539
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e0f4b8f1f5294a5ab8e7a43161f1f14b
+run_name: indecisive-mink-61
+run_uuid: e0f4b8f1f5294a5ab8e7a43161f1f14b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726325267530
+status: 3
+tags: []
+user_id: samuelpmh

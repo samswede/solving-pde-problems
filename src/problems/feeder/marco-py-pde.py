@@ -209,7 +209,7 @@ def run(config):
 if __name__ == "__main__":
     # Configuration dictionary for hyperparameters
     config = {
-        "grid_size": 500,
+        "grid_size": 200,
         "initial_conditions": {
             "ch": 0.0,
             "cc": 0.0,
@@ -238,13 +238,15 @@ if __name__ == "__main__":
         "output_filename": "output.gif",
     }
 
-    # Create an Optuna study
-    study = optuna.create_study(direction="minimize")
-    study.optimize(objective, n_trials=10)
+    run(config)
 
-    # Log the best method found
-    best_method = study.best_params["method"]
-    mlflow.log_param("best_solver_method", best_method)
+    # # Create an Optuna study
+    # study = optuna.create_study(direction="minimize")
+    # study.optimize(objective, n_trials=10)
 
-    # Run the simulation with the best method
-    run_with_timeout(config, best_method, timeout=15)
+    # # Log the best method found
+    # best_method = study.best_params["method"]
+    # mlflow.log_param("best_solver_method", best_method)
+
+    # # Run the simulation with the best method
+    # run_with_timeout(config, best_method, timeout=15)
