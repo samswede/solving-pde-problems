@@ -13,6 +13,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}\pagestyle{fancy}\fancyhf{}\lhead{{PolyModels Hub Confidential}}\rhead{Milling - E2E Model Development}\cfoot{Page \thepage \,\,of \pageref{LastPage}}
 
+\usepackage{listings}
+
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}\setlength{\parindent}{0em}
 \usepackage{upgreek}
 \usepackage{mathrsfs}
@@ -58,7 +60,7 @@
 \vspace{0.5cm}
 
 \begin{minipage}{1\textwidth}
-    \textbf{Report name}: \textcolor{blue}{ \large PMH Internal: Approach to solving PDE problems} \\
+    \textbf{Report name}: \textcolor{blue}{ \large PMH Internal: Approach to Solving PDAE Systems} \\
     \textbf{Report ID}: \textcolor{blue}{ CDCLINE\_01 }\\
 
 \end{minipage}%
@@ -75,10 +77,9 @@
 
 \rule{\textwidth}{0.1pt}
 
-
 \begin{center} \textbf{{\large Report Summary}} \end{center}
 
-In this report, we present approaches to solving types of PDE problems that are common in the pharmaceutical industry, comparing them in 3 principle aspects: ease of implementation, computational efficiency and accuracy.
+In this report, we present approaches to solving types of PDAE problems that are common in the pharmaceutical industry, comparing them in 3 principle aspects: ease of implementation, computational efficiency and accuracy.
 First, we present a simple PDE problem that is representative of a common pharmaceutical process, the residence time distribution in a continuous powder mixer. We then move on to more complex problems, such as the fluid flow in a packed bed, and the diffusion of a solute through a liquid.
 Then we compare computational implementations of these problems in a couple of software packages: py-pde, Scipy FDiff, PyClaw, and MoL.jl.
 
@@ -98,34 +99,325 @@ Then we compare computational implementations of these problems in a couple of s
 
 \newpage{}
 
+\section{Introduction}
+
+In pharmaceutical process development, we frequently deal with distributed systems, where key variables such as concentration, temperature, or pressure vary both in time and space. These systems are crucial to understanding the dynamics of many processes, including fluid flow in pipes, mixing in reactors, mass transfer in packed beds, and diffusion through membranes. For instance, understanding how a solute diffuses through a solvent in a reactor or how powder mixes in continuous manufacturing can significantly impact the efficiency, scalability, and control of pharmaceutical production processes.
+
+The mathematical modeling of these distributed systems often leads to differential-algebraic equations (DAEs) and, more generally, to partial differential-algebraic equations (PDAEs). These systems involve both differential equations, which describe how the system evolves over time, and algebraic equations, which impose constraints that must be satisfied at every time step or spatial position.
+
+However, numerically solving PDAEs is significantly more complex than dealing with ordinary differential equations (ODEs) or DAEs alone. The inclusion of spatial derivatives introduces additional challenges in both the formulation and the numerical solution. Specifically, the following issues arise:
+\begin{itemize}
+    \item Coupled dynamics in time and space, requiring specialized discretization methods and solver techniques.
+    \item Mixed algebraic and differential constraints, which demand careful handling to ensure the system remains stable and solvable.
+    \item Stiffness and instability, often due to the presence of fast and slow dynamics in different parts of the system.
+\end{itemize}
+
+This report focuses on addressing a subset of these challenges in the context of pharmaceutical process development. We will compare different mathematical and computational approaches, particularly software implementations of PDAE solvers, and examine how they perform on problems relevant to our operations. The report will also introduce common mathematical notation and classify the problems to create a foundation for future work on solving distributed systems.
+
+\section{Mathematical Formulation}
+
+In this section, we introduce the mathematical framework for formulating and solving different classes of equations, ranging from ordinary differential equations (ODEs) to partial differential-algebraic equations (PDAEs). These equations represent the behavior of distributed systems in process modeling, focusing on how variables evolve over time and space under various physical constraints.
+
+\subsection{Ordinary Differential Equations (ODEs)}
+
+Ordinary differential equations describe the rate of change of a dependent variable with respect to a single independent variable (usually time). They are commonly used to model systems where the spatial variation is not considered, such as simple batch reactors or stirred tanks.
+
+The general form of an ODE is:
+
+\[
+\frac{dy(t)}{dt} = f(y(t), t)
+\]
+
+where \(y(t)\) is the dependent variable and \(t\) is the independent variable, typically representing time.
+
+\subsection{Ordinary Differential Equations (ODEs)}
+
+ODEs are the simplest form of differential equations and are used to model systems where the spatial variation is not considered, such as simple a CSTR without equilibrium reactions.
+
+Common examples include:
+
+\begin{itemize}
+    \item CSTR (no equilibrium reactions)
+\end{itemize}
+
+The general form of an ODE is:
+
+\[
+\frac{dx(t)}{dt} = f(x(t), t)
+\]
+
+where \(x(t)\) is the dependent variable and \(t\) is the independent variable, typically representing time.
+
+\subsection{Differential-Algebraic Equations (DAEs)}
+
+DAE systems extend ODEs by introducing algebraic equations that constrain the system. These algebraic constraints often represent conservation laws, equilibrium conditions, or other physical constraints that must be satisfied continuously.
+
+
+A DAE system can be written as:
+
+\begin{equation}
+    F\left( \dot{x}(t), x(t), y(t), t \right) = 0
+\end{equation}
+
+where \(x(t)\) are the differential variables, and \(y(t)\) are the algebraic variables that are coupled to the differential variables through algebraic constraints.
+
+\subsubsection{High-Index DAEs}
+
+In high-index DAEs, the algebraic constraints are more complex, leading to additional difficulties in solving the system numerically. The **index** of a DAE measures how many times the algebraic constraints need to be differentiated to reduce the system to an ODE. High-index DAEs often require special techniques or reformulations to avoid instability and ill-conditioning in numerical solvers.
+
+\subsection{Partial Differential Equations (PDEs)}
+
+Partial differential equations involve partial derivatives with respect to multiple independent variables, typically time and space. PDEs describe distributed systems where the state of the system varies not just over time but also across a spatial domain.
+
+\subsubsection{Parabolic PDEs}
+
+Parabolic PDEs describe systems where diffusion or dissipative effects dominate. The most common example is the heat equation, which models the diffusion of heat through a medium:
+
+\[
+\frac{\partial x}{\partial t} = \alpha \frac{\partial^2 x}{\partial z^2}
+\]
+
+where \(x\) is the temperature, \(t\) is time, and \(z\) is the spatial coordinate. The second spatial derivative represents the diffusion process.
+
+\subsubsection{Hyperbolic PDEs}
+
+Hyperbolic PDEs are used to describe wave-like phenomena, where information propagates at finite speeds. The simplest example is the wave equation:
+
+\[
+\frac{\partial^2 x}{\partial t^2} = c^2 \frac{\partial^2 x}{\partial z^2}
+\]
+
+where \(x(z,t)\) represents the wave displacement, and \(c\) is the wave speed.
+
+\subsubsection{Elliptic PDEs}
+
+Elliptic PDEs describe steady-state systems where no time evolution occurs, such as the Laplace equation or Poisson's equation:
+
+\[
+\nabla^2 x = 0
+\]
+
+Elliptic equations are often used in the modeling of potential fields, such as electrostatic or gravitational fields.
+
+\subsection{Mixed Partial Differential-Algebraic Equation (PDAE) Systems}
+
+PDAEs are systems that combine the characteristics of both DAEs and PDEs. They involve both partial differential equations (PDEs) with respect to time and space, and algebraic equations that impose constraints on the system. PDAEs arise frequently in the modeling of distributed systems where spatial and temporal variations are both important, such as in fluid dynamics, heat transfer, and reaction-diffusion systems.
+
+\subsubsection{General Form of PDAE System}
+
+A typical PDAE system can be written as:
+
+\[
+f(x, x_z, x_{zz}, x_t, y, y_z, y_{zz}) = 0, \quad \forall z \in (0, L)
+\]
+\[
+g(x, y) = 0, \quad \forall z \in [0, L]
+\]
+
+where:
+- \(x(z,t)\) are the **differential variables**, which depend on both spatial position \(z\) and time \(t\),
+- \(y(z,t)\) are the **algebraic variables**, which are functions of \(z\) but do not involve time derivatives,
+- \(f\) represents the system of PDEs that describe the dynamics within the spatial domain \((0, L)\),
+- \(g\) represents the algebraic constraints that hold throughout the domain.
+
+The **subscripts** denote partial derivatives, where:
+- \(x_t = \frac{\partial x}{\partial t}\) is the time derivative,
+- \(x_z = \frac{\partial x}{\partial z}\) and \(x_{zz} = \frac{\partial^2 x}{\partial z^2}\) are the first and second spatial derivatives, respectively,
+- \(y_z = \frac{\partial y}{\partial z}\) and \(y_{zz} = \frac{\partial^2 y}{\partial z^2}\) are the first and second spatial derivatives of \(y\).
+
+\subsubsection{Boundary Conditions}
+
+The system is subject to boundary conditions at both ends of the spatial domain. These conditions are typically written as:
+
+\[
+B_L(x, x_z, y, y_z) = 0 \quad \text{at} \, z = 0
+\]
+\[
+B_R(x, x_z, y, y_z) = 0 \quad \text{at} \, z = L
+\]
+
+where \(B_L\) and \(B_R\) represent the boundary conditions at the left and right boundaries, respectively.
+
+\subsubsection{Initial Conditions}
+
+At the start of the simulation (\(t = 0\)), initial conditions must be specified:
+
+\[
+h(x(z,0), x_z(z,0), x_t(z,0), y(z,0), y_z(z,0)) = 0, \quad \forall z \in (0, L)
+\]
+
+These conditions define the initial values of the differential and algebraic variables and their derivatives across the spatial domain.
+
+\subsubsection{Classification of PDAE Systems}
+
+A PDAE system can be classified by:
+- **Number of differential variables** \(n\),
+- **Number of algebraic variables** \(m\),
+- **Number of boundary conditions** at each boundary.
+
+\subsubsection{Example of PDAE System for Later Classification}
+
+As an example, consider mass transport and reaction in a tubular reactor:
+
+\[
+\frac{\partial C_A}{\partial t} = -u \frac{\partial C_A}{\partial z} + D \frac{\partial^2 C_A}{\partial z^2} - r_A(C_A), \quad \forall z \in (0, L)
+\]
+\[
+0 = C_A - K \, C_B, \quad \forall z \in [0, L]
+\]
+
+where \(C_A(z,t)\) and \(C_B(z,t)\) represent concentrations, \(u\) is velocity, and \(D\) is the diffusion coefficient.
+
+
 \section{Problem Sets}
-\subsection{Feeder: Advection-Diffusion}
-\subsubsection{V1: single pde}
-\subsubsection{V2: coupled pde and ode}
-\subsection{Fixed Bed Incompressible Fluid: Advection-Diffusion-Sorption}
-\subsubsection{V1: coupled pdes}
-\subsubsection{V2: coupled pde and ode}
-\subsection{Fixed Bed Compressible Fluid: Advection-Diffusion-Sorption}
+\subsection{Advection-Dispersion in Incompressible Fluid}
+\subsubsection{Dispersion dominated}
+\subsubsection{Convection dominated}
+\subsubsection{Coupled PDE and ODE}
+\subsection{Advection-Dispersion in Compressible Fluid}
+
+\subsection{Advection-Dispersion-Reaction}
+\subsection{Advection-Dispersion-Sorption}
+\subsubsection{Quasi-stationary sorption}
+\subsubsection{Rapid sorption}
+
+\section{Numerical Methods for Solving PDAE systems}
+
+\subsection{Finite Difference}
+\subsection{Finite Volume}
+\subsection{Polynomial Approximation}
+\subsubsection{Orthogonal Collocation on Finite Elements}
+\subsection{Other}
 
 \section{Software Libraries}
-\subsection{Py-PDE}
-\subsection{Scipy FDiff}
-\subsection{PyClaw}
-\subsection{MoL.jl}
 
-\section{Solving PDEs}
-\subsection{Frameworks}
-\subsubsection{Method of Lines}
+\subsection{Python}
+\subsubsection{Py-PDE}
+\subsubsection{Scipy FDiff}
+\subsubsection{PyClaw}
+\subsection{Julia}
+\subsubsection{MoL.jl}
 
-\subsection{Methods}
-\subsubsection{Finite Difference}
-\subsubsection{Finite Volume}
-\subsubsection{Finite Element}
-\subsubsection{Orthogonal Collocation}
-\subsubsection{Other}
+\section{Conclusion}
 
 \newpage{}
+
+
+\bibliographystyle{apalike}
+\bibliography{references}
+
 \appendix
+\section{Experiment Tracking using MLflow}
+In this section, we discuss the importance of experiment tracking and how using MLflow can lead to better organization and analysis of results. A methodical approach to tracking experiments ensures that all relevant data is captured, making it easier to reproduce results and draw meaningful conclusions.
+
+\subsection{Introduction to MLflow}
+MLflow is an open-source platform designed to manage the end-to-end machine learning lifecycle. It provides tools for tracking experiments, packaging code into reproducible runs, and sharing and deploying models. By using MLflow, we can systematically log parameters, metrics, and artifacts, which helps in maintaining a clear record of all experiments.
+
+\subsection{Parent and Child Runs}
+One of the powerful features of MLflow is the concept of parent and child runs. This hierarchical structure allows for better organization of experiments, especially when dealing with complex projects involving multiple iterations and variations.
+
+\subsubsection{Benefits of Parent and Child Runs}
+\begin{itemize}
+    \item \textbf{Organizational Clarity}: Group related runs together, making it easier to navigate and analyze results.
+    \item \textbf{Enhanced Traceability}: Trace back results, metrics, or artifacts to their specific run.
+    \item \textbf{Scalability}: Manage a large number of runs efficiently.
+    \item \textbf{Improved Collaboration}: Ensure team members can easily understand the structure and flow of experiments.
+\end{itemize}
+
+\subsubsection{Proposed Hierarchy for PDE Project}
+For this PDE project, we propose the following hierarchy of relationships using parent and child runs:
+\begin{itemize}
+    \item \textbf{Experiment}: "PDE Problem Solving Approaches"
+    \item \textbf{Parent Runs}: Each parent run represents a different PDE problem set (e.g., "Feeder: Advection-Diffusion", "Fixed Bed Incompressible Fluid").
+    \item \textbf{Child Runs}: Each child run represents a specific method or variation used to solve the PDE problem (e.g., "Finite Difference Method", "Finite Volume Method").
+\end{itemize}
+
+This structure will help in systematically organizing the experiments and making it easier to compare different methods and their results.
+
+\section{Bayesian Optimization for Solver and Hyperparameter Selection}
+In this section, we discuss the use of Bayesian optimization for determining the best solvers and hyperparameters for solving PDE problems. We refer to the Optuna library, which provides an efficient implementation of Bayesian optimization.
+
+\subsection{Introduction to Bayesian Optimization}
+Bayesian optimization is a strategy for optimizing objective functions that are expensive to evaluate. It builds a probabilistic model of the objective function and uses this model to select the most promising hyperparameters to evaluate in the true objective function.
+
+\subsection{Using Optuna for Hyperparameter Optimization}
+Optuna is an open-source hyperparameter optimization framework to automate hyperparameter search. It is particularly useful for machine learning and scientific computing tasks where the choice of hyperparameters can significantly impact performance.
+
+\subsubsection{Example Code Snippet}
+Below is an example code snippet demonstrating how to use Optuna for optimizing solver methods and hyperparameters in the context of solving PDE problems using the `py-pde` library.
+
+\begin{lstlisting}[language=Python, caption=Optuna optimization for PDE solver selection, label=lst:optuna_pde]
+import optuna
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
+
+def run_with_timeout(config, method, timeout):
+    config["solver_params"]["method"] = method
+    with mlflow.start_run(run_name=f"advection_diffusion_2_{method}", nested=True):
+        mlflow.set_tag("pde_package", "py-pde")
+        mlflow.log_param("solver_method", method)
+        mlflow.set_tag("parent_run", "advection_diffusion_2_parent")
+        mlflow.set_tag("child_run_index", method)
+        start_time = time.time()
+        run(config)
+        end_time = time.time()
+        return end_time - start_time
+
+def objective(trial):
+    method = trial.suggest_categorical("method", ["LSODA", "RK45", "RK23", "Radau", "BDF"])
+    timeout = 15  # Set a timeout to whatever is time to give up on a solver
+    try:
+        with ThreadPoolExecutor() as executor:
+            future = executor.submit(run_with_timeout, config, method, timeout)
+            execution_time = future.result(timeout=timeout)
+        return execution_time  # Return the execution time if successful
+    except TimeoutError:
+        return float('inf')  # Return infinity if timeout occurs
+
+if __name__ == "__main__":
+    # Configuration dictionary for hyperparameters
+    config = {
+        "grid_size": 500,
+        "initial_conditions": {
+            "ch": 0.0,
+            "cc": 0.0,
+            "L": 0.5,
+            "vc": 0.001,
+            "omega": 200.0 / 60.0,
+            "error": 0.0,
+        },
+        "feeder_params": {
+            "A": np.pi * 0.2**2,
+            "Vc": 0.005,
+            "rho_bulk": 712.0,
+            "mass_flowrate_setpoint": 18.0,
+        },
+        "disturbance_params": {
+            "range": (15, 25),
+            "value": 1.0,
+            "kernel_size": 5,
+        },
+        "solver_params": {
+            "t_range": 1500.0,
+            "dt": 0.01,
+            "solver": "ScipySolver",
+            "method": "LSODA",
+        },
+        "output_filename": "output.gif",
+    }
+
+    # Create an Optuna study
+    study = optuna.create_study(direction="minimize")
+    study.optimize(objective, n_trials=10)
+
+    # Log the best method found
+    best_method = study.best_params["method"]
+    mlflow.log_param("best_solver_method", best_method)
+
+    # Run the simulation with the best method
+    run_with_timeout(config, best_method, timeout=15)
+\end{lstlisting}
+This example demonstrates how to use Optuna to find the best solver method for a PDE problem by minimizing the execution time. The \texttt{objective} function defines the optimization target, and the \texttt{run\_with\_timeout} function handles the execution of the solver with a specified timeout.
+
 \section{Hopper Balance Equation}
 \label{sec:hopper_balance}
 Starting from the PFR mass balance equation
@@ -153,11 +445,5 @@ The final equation with boundary immobilized is obtained by replacing the partia
 \begin{equation}
     \frac{\partial g}{\partial t} = - \frac{1}{L(t)}\bigg(v(t) - x\frac{dL(t)}{dt}\bigg)\frac{\partial g}{\partial x} + \frac{D}{L(t)^2}\frac{\partial^2 g}{\partial x^2}; \quad x \in [0, 1]
 \end{equation}
-
-\newpage{}
-\bibliographystyle{apalike}
-\bibliography{references}
-
-
 
 \end{document}

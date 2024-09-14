@@ -1,0 +1,9 @@
+{
+    "julia": "~1.6.7, ~1.7, ~1.8, ~1.9, =1.10.0, ~1.10.4",
+    "packages": {
+        "DifferentialEquations": {
+            "uuid": "0c46a032-eb83-5123-abaf-570d42b7fbaa",
+            "version": "=7.14.0"
+        }
+    }
+}

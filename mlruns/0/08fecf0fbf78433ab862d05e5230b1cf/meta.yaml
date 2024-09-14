@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/08fecf0fbf78433ab862d05e5230b1cf/artifacts
+end_time: 1725908487793
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 08fecf0fbf78433ab862d05e5230b1cf
+run_name: whimsical-roo-956
+run_uuid: 08fecf0fbf78433ab862d05e5230b1cf
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1725908467229
+status: 3
+tags: []
+user_id: samuelpmh

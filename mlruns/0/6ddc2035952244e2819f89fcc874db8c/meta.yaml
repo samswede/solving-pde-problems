@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/6ddc2035952244e2819f89fcc874db8c/artifacts
+end_time: 1725914620368
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6ddc2035952244e2819f89fcc874db8c
+run_name: advection_diffusion_2_RK45
+run_uuid: 6ddc2035952244e2819f89fcc874db8c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1725914616894
+status: 3
+tags: []
+user_id: samuelpmh
