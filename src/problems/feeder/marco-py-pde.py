@@ -290,7 +290,7 @@ def identify_best_method():
     # Run the Optuna study
     run_optuna_study(optuna_config, run, log_feeder_params, n_trials=5)
 
-def main3():
+def find_grid_size_for_timeout():
     optuna_config = {
         "grid_size": 200,
         "initial_conditions": {
@@ -336,4 +336,4 @@ def main3():
 
 if __name__ == "__main__":
     # identify_best_method()  # Run this to do a study to find the best method
-    main3()  # Run this to perform the parameter sweep
+    find_grid_size_for_timeout()  # Run this to perform the parameter sweep

@@ -171,8 +171,8 @@ function solve_adv_disp_pulse(params::PyDict)
     DaxialC = params["DaxialC"]
     L = params["L"]
     tf = params["tf"]
-    solver_name = params["solver_name"]
-    num_elements = params["num_elements"]
+    solver_name = params["method"]
+    grid_size = params["grid_size"]
     
     solver = get_solver(solver_name)
 
@@ -215,7 +215,7 @@ function solve_adv_disp_pulse(params::PyDict)
 
     @named pde_system = PDESystem([eqA, eqB, eqC], ic_bc, domains, [t, z], [CA(t, z), CB(t, z), CC(t, z)])
 
-    dz = L / num_elements
+    dz = L / grid_size
     discretization = MOLFiniteDifference([z => dz], t)
 
     prob = discretize(pde_system, discretization)
@@ -239,8 +239,8 @@ function solve_adv_disp_wave(params::PyDict)
     DaxialC = params["DaxialC"]
     L = params["L"]
     tf = params["tf"]
-    solver_name = params["solver_name"]
-    num_elements = params["num_elements"]
+    solver_name = params["method"]
+    grid_size = params["grid_size"]
 
     solver = get_solver(solver_name)
 
@@ -277,7 +277,7 @@ function solve_adv_disp_wave(params::PyDict)
 
     @named pde_system = PDESystem([eqA, eqB, eqC], ic_bc, domains, [t, z], [CA(t, z), CB(t, z), CC(t, z)])
 
-    dz = L / num_elements
+    dz = L / grid_size
     discretization = MOLFiniteDifference([z => dz], t)
 
     prob = discretize(pde_system, discretization)
@@ -301,8 +301,8 @@ function solve_adv_disp_all(params::PyDict)
     DaxialC = params["DaxialC"]
     L = params["L"]
     tf = params["tf"]
-    solver_name = params["solver_name"]
-    num_elements = params["num_elements"]
+    solver_name = params["method"]
+    grid_size = params["grid_size"]
 
     solver = get_solver(solver_name)
 
@@ -339,7 +339,7 @@ function solve_adv_disp_all(params::PyDict)
 
     @named pde_system = PDESystem([eqA, eqB, eqC], ic_bc, domains, [t, z], [CA(t, z), CB(t, z), CC(t, z)])
 
-    dz = L / num_elements
+    dz = L / grid_size
     discretization = MOLFiniteDifference([z => dz], t)
 
     prob = discretize(pde_system, discretization)

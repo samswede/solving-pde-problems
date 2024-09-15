@@ -1,0 +1,16 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/75dda88522634901b38703e6eb0fffd4/artifacts
+deleted_time: 1726428577345
+end_time: 1726427690400
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: deleted
+run_id: 75dda88522634901b38703e6eb0fffd4
+run_name: flawless-stork-792
+run_uuid: 75dda88522634901b38703e6eb0fffd4
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726427688631
+status: 3
+tags: []
+user_id: samuelpmh

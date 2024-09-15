@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/984739065445426198/0fc6c99838cb4ad5abccb21d1d04df99/artifacts
+end_time: 1726433342860
+entry_point_name: ''
+experiment_id: '984739065445426198'
+lifecycle_stage: active
+run_id: 0fc6c99838cb4ad5abccb21d1d04df99
+run_name: polite-vole-747
+run_uuid: 0fc6c99838cb4ad5abccb21d1d04df99
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726433320265
+status: 3
+tags: []
+user_id: samuelpmh

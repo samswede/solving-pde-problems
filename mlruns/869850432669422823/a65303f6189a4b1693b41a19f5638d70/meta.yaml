@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/a65303f6189a4b1693b41a19f5638d70/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: a65303f6189a4b1693b41a19f5638d70
+run_name: legendary-zebra-757
+run_uuid: a65303f6189a4b1693b41a19f5638d70
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726430854937
+status: 1
+tags: []
+user_id: samuelpmh

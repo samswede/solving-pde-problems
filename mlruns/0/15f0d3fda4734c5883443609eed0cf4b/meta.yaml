@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/15f0d3fda4734c5883443609eed0cf4b/artifacts
+end_time: 1726431382486
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 15f0d3fda4734c5883443609eed0cf4b
+run_name: vaunted-ox-593
+run_uuid: 15f0d3fda4734c5883443609eed0cf4b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726431382476
+status: 3
+tags: []
+user_id: samuelpmh

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/ba9d94c47c374548acec72626494bd45/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: ba9d94c47c374548acec72626494bd45
+run_name: melodic-fawn-175
+run_uuid: ba9d94c47c374548acec72626494bd45
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726430874996
+status: 1
+tags: []
+user_id: samuelpmh

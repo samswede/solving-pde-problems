@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/e84e8051397c4f80b4cdcf50f05a8aac/artifacts
+end_time: 1726431189740
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e84e8051397c4f80b4cdcf50f05a8aac
+run_name: adv_disp_MethodOfLines.jl_KenCarp4_grid_200
+run_uuid: e84e8051397c4f80b4cdcf50f05a8aac
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726431189723
+status: 3
+tags: []
+user_id: samuelpmh

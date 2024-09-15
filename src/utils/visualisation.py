@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+import mlflow
 
 def create_gif(solution_arrays, labels, filename='solution_animation.gif'):
     """
@@ -27,9 +28,6 @@ def create_gif(solution_arrays, labels, filename='solution_animation.gif'):
         return lines
 
     ani = FuncAnimation(fig, update, frames=range(solution_arrays[0].shape[0]), blit=True)
-    # ani.save(filename, writer='imagemagick', fps=10)
     ani.save(filename, writer='pillow', fps=10)
     plt.close()
 
-# Example usage:
-# create_gif(solution_array_A)

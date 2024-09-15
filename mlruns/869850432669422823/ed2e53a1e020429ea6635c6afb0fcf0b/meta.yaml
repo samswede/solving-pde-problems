@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/ed2e53a1e020429ea6635c6afb0fcf0b/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: ed2e53a1e020429ea6635c6afb0fcf0b
+run_name: wistful-owl-244
+run_uuid: ed2e53a1e020429ea6635c6afb0fcf0b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726430844895
+status: 1
+tags: []
+user_id: samuelpmh

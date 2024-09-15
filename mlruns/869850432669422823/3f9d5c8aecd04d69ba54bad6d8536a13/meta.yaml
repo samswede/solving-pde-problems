@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/3f9d5c8aecd04d69ba54bad6d8536a13/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: 3f9d5c8aecd04d69ba54bad6d8536a13
+run_name: youthful-colt-459
+run_uuid: 3f9d5c8aecd04d69ba54bad6d8536a13
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726430949153
+status: 1
+tags: []
+user_id: samuelpmh

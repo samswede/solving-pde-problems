@@ -1,0 +1,1 @@
+{'MethodOfLines.jl': {'methods': ['Tsit5', 'RK4', 'Vern7', 'DP5', 'BS3', 'Rodas5', 'TRBDF2', 'KenCarp4', 'Euler', 'ImplicitEuler', 'Heun']}}

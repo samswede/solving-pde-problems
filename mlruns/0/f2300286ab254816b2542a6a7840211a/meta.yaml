@@ -1,0 +1,16 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/f2300286ab254816b2542a6a7840211a/artifacts
+deleted_time: 1726428577344
+end_time: 1726415770595
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: deleted
+run_id: f2300286ab254816b2542a6a7840211a
+run_name: blushing-ram-643
+run_uuid: f2300286ab254816b2542a6a7840211a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726415768814
+status: 3
+tags: []
+user_id: samuelpmh

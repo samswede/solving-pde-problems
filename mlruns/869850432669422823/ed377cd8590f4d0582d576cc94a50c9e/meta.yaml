@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/ed377cd8590f4d0582d576cc94a50c9e/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: ed377cd8590f4d0582d576cc94a50c9e
+run_name: angry-grouse-361
+run_uuid: ed377cd8590f4d0582d576cc94a50c9e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726431069340
+status: 1
+tags: []
+user_id: samuelpmh

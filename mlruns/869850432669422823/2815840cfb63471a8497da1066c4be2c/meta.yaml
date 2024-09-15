@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/2815840cfb63471a8497da1066c4be2c/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: 2815840cfb63471a8497da1066c4be2c
+run_name: hilarious-crow-572
+run_uuid: 2815840cfb63471a8497da1066c4be2c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726431189741
+status: 1
+tags: []
+user_id: samuelpmh

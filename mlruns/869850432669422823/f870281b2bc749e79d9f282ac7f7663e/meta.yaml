@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/f870281b2bc749e79d9f282ac7f7663e/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: f870281b2bc749e79d9f282ac7f7663e
+run_name: serious-skink-863
+run_uuid: f870281b2bc749e79d9f282ac7f7663e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726430989493
+status: 1
+tags: []
+user_id: samuelpmh

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/2f15c287d6d44c7392624d14d60891b5/artifacts
+end_time: 1726428571031
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: 2f15c287d6d44c7392624d14d60891b5
+run_name: delightful-goose-239
+run_uuid: 2f15c287d6d44c7392624d14d60891b5
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726428551291
+status: 3
+tags: []
+user_id: samuelpmh

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/d650da01c57c468294f2003b49acaa19/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: d650da01c57c468294f2003b49acaa19
+run_name: honorable-stork-381
+run_uuid: d650da01c57c468294f2003b49acaa19
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726431310083
+status: 1
+tags: []
+user_id: samuelpmh

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/7da7bdcc39c44d14ac16d1d43264a1b3/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: 7da7bdcc39c44d14ac16d1d43264a1b3
+run_name: silent-wren-143
+run_uuid: 7da7bdcc39c44d14ac16d1d43264a1b3
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726431269646
+status: 1
+tags: []
+user_id: samuelpmh

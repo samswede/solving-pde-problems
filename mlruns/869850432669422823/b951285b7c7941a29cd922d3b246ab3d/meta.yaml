@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/b951285b7c7941a29cd922d3b246ab3d/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: b951285b7c7941a29cd922d3b246ab3d
+run_name: clean-sponge-916
+run_uuid: b951285b7c7941a29cd922d3b246ab3d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726431229630
+status: 1
+tags: []
+user_id: samuelpmh

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/279341362cb8452ab2ca67e978ab3f6f/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: 279341362cb8452ab2ca67e978ab3f6f
+run_name: loud-penguin-438
+run_uuid: 279341362cb8452ab2ca67e978ab3f6f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726430864995
+status: 1
+tags: []
+user_id: samuelpmh

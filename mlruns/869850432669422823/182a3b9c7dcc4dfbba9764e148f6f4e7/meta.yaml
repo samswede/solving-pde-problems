@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/869850432669422823/182a3b9c7dcc4dfbba9764e148f6f4e7/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '869850432669422823'
+lifecycle_stage: active
+run_id: 182a3b9c7dcc4dfbba9764e148f6f4e7
+run_name: tasteful-conch-55
+run_uuid: 182a3b9c7dcc4dfbba9764e148f6f4e7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726431349840
+status: 1
+tags: []
+user_id: samuelpmh

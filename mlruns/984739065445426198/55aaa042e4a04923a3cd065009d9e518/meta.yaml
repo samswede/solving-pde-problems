@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/984739065445426198/55aaa042e4a04923a3cd065009d9e518/artifacts
+end_time: 1726432422857
+entry_point_name: ''
+experiment_id: '984739065445426198'
+lifecycle_stage: active
+run_id: 55aaa042e4a04923a3cd065009d9e518
+run_name: unique-panda-832
+run_uuid: 55aaa042e4a04923a3cd065009d9e518
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726432400611
+status: 3
+tags: []
+user_id: samuelpmh
