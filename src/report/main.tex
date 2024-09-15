@@ -13,6 +13,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}\pagestyle{fancy}\fancyhf{}\lhead{{PolyModels Hub Confidential}}\rhead{Milling - E2E Model Development}\cfoot{Page \thepage \,\,of \pageref{LastPage}}
 
+\usepackage{pdflscape}
 \usepackage{listings}
 
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}\setlength{\parindent}{0em}
@@ -298,6 +299,10 @@ where \(C_A(z,t)\) and \(C_B(z,t)\) represent concentrations, \(u\) is velocity,
 \subsection{Julia}
 \subsubsection{MoL.jl}
 
+
+
+
+
 \section{Conclusion}
 
 \newpage{}
@@ -307,6 +312,124 @@ where \(C_A(z,t)\) and \(C_B(z,t)\) represent concentrations, \(u\) is velocity,
 \bibliography{references}
 
 \appendix
+
+\begin{landscape}
+
+\section{Performance Impact on User Experience}
+
+
+The performance of PDE solvers significantly impacts user experience, the ultimate measure of a solver's value. This section introduces a classification system that translates solver performance metrics into tangible user experience outcomes. By establishing these relationships, we can assess the value of performance improvements and guide optimization efforts. This framework quantifies how solver efficiency gains translate to improvements in workflow efficiency and user satisfaction, helping prioritize development efforts for maximum real-world impact. Our aim is to provide a clear link between solver performance enhancements and meaningful improvements in user experience.
+
+\subsection{Response Time Classification}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Use Case} & \textbf{10s} & \textbf{3s} & \textbf{1s} & \textbf{0.3s} & \textbf{0.1s} & \textbf{0.03s} & \textbf{0.01s} \\ \hline
+    Simple Model Validation (1 Simulation) & 10 & 3 & 1 & 0.3 & 0.1 & 0.03 & 0.01 \\ \hline
+    Basic Parameter Sweep (10 Simulations) & 100 & 30 & 10 & 3.0 & 1.0 & 0.3 & 0.1 \\ \hline
+    Local Sensitivity Analysis (100 Simulations) & 1000 & 300 & 100 & 30.0 & 10.0 & 3.0 & 1.0 \\ \hline
+    Global Sensitivity Analysis (1,000 Simulations) & 10000 & 3000 & 1000 & 300.0 & 100.0 & 30.0 & 10.0 \\ \hline
+    Global Optimization (10,000 Simulations) & 100000 & 30000 & 10000 & 3000.0 & 1000.0 & 300.0 & 100.0 \\ \hline
+    \end{tabular}
+    \caption{Calculated Time Table for Simulations}
+\end{table}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Simulations} & \textbf{10s} & \textbf{3s} & \textbf{1s} & \textbf{0.3s} & \textbf{0.1s} & \textbf{0.03s} & \textbf{0.01s} \\ \hline
+    (1 ) & Brief Processing & Noticeable Delay & Noticeable Delay & Smooth Flow & Smooth Flow & Instant Feedback & Instant Feedback \\ \hline
+    (10) & Heavy Processing & Extended Processing & Brief Processing & Noticeable Delay & Noticeable Delay & Smooth Flow & Smooth Flow \\ \hline
+    (100) & Very Long Tasks & Batch Processing & Heavy Processing & Extended Processing & Brief Processing & Noticeable Delay & Noticeable Delay \\ \hline
+    (1,000) & Beyond 1 Hour & Very Long Tasks & Very Long Tasks & Batch Processing & Heavy Processing & Extended Processing & Brief Processing \\ \hline
+    (10,000) & Beyond 1 Hour & Beyond 1 Hour & Beyond 1 Hour & Very Long Tasks & Very Long Tasks & Batch Processing & Heavy Processing \\ \hline
+    \end{tabular}
+    \caption{Classified UX Wait Times for Simulations}
+\end{table}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|l|c|c|c|c|c|}
+    \hline
+    \textbf{Response Time} & \textbf{1 Sim} & \textbf{10 Sims} & \textbf{100 Sims} & \textbf{1,000 Sims} & \textbf{10,000 Sims} \\ \hline
+    \textbf{Instant Feedback} & < 0.1 s & < 0.01 s & < 0.001 s & < 0.0001 s & < 0.00001 s \\ \hline
+    \textbf{Smooth Flow} & 0.1 - 1 s & 0.01 - 0.1 s & 0.001 - 0.01 s & 0.0001 - 0.001 s & 0.00001 - 0.0001 s \\ \hline
+    \textbf{Noticeable Delay} & 1 - 5 s & 0.1 - 0.5 s & 0.01 - 0.05 s & 0.001 - 0.005 s & 0.0001 - 0.0005 s \\ \hline
+    \textbf{Short Wait} & 5 - 10 s & 0.5 - 1 s & 0.05 - 0.1 s & 0.005 - 0.01 s & 0.0005 - 0.001 s \\ \hline
+    \textbf{Brief Processing} & 10 - 30 s & 1 - 3 s & 0.1 - 0.3 s & 0.01 - 0.03 s & 0.001 - 0.003 s \\ \hline
+    \textbf{Extended Processing} & 30 s - 1 minute & 3 - 6 s & 0.3 - 0.6 s & 0.03 - 0.06 s & 0.003 - 0.006 s \\ \hline
+    \textbf{Heavy Processing} & 1 - 5 minutes & 6 - 30 s & 0.6 - 3 s & 0.06 - 0.3 s & 0.006 - 0.03 s \\ \hline
+    \textbf{Batch Processing} & 5 - 15 minutes & 30 s - 1.5 minutes & 3 - 9 s & 0.3 - 0.9 s & 0.03 - 0.09 s \\ \hline
+    \textbf{Very Long Tasks} & 15 minutes - 1 hour & 1.5 - 6 minutes & 9 - 36 s & 0.9 - 3.6 s & 0.09 - 0.36 s \\ \hline
+    \end{tabular}
+    \caption{Required Solver Speeds for Different Response Time Classifications}
+\end{table}
+
+\subsection{Explanation of Use Cases}
+
+\begin{itemize}
+    \item \textbf{1 Simulation}: Suitable for \textbf{simple validation} tasks where only one parameter configuration is being tested, or a quick check is needed.
+    \item \textbf{10 Simulations}: Appropriate for \textbf{small parameter sweeps} or \textbf{basic sensitivity analysis} where minor variations in a few parameters are being explored.
+    \item \textbf{100 Simulations}: Used for \textbf{local sensitivity analysis}, \textbf{small-scale optimization}, or exploring a more diverse set of parameters.
+    \item \textbf{1,000 Simulations}: Typical for \textbf{Global Sensitivity Analysis (GSA)} or more thorough \textbf{iterative optimization} where multiple factors need to be evaluated.
+    \item \textbf{10,000 Simulations}: Common for \textbf{global optimization algorithms}, \textbf{large parameter sweeps}, or \textbf{uncertainty quantification}, where extensive exploration of the parameter space is necessary.
+\end{itemize}
+
+\subsection{UI Requirements for Each UX Wait Time}
+
+\begin{itemize}
+    \item \textbf{Instant Feedback (<0.1 second)}:
+        \begin{itemize}
+            \item No loading indicators needed.
+            \item Immediate response to user input.
+        \end{itemize}
+    \item \textbf{Smooth Flow (0.1 - 1 second)}:
+        \begin{itemize}
+            \item Light, non-disruptive visual feedback (e.g., button animations).
+            \item Instant screen or data updates.
+        \end{itemize}
+    \item \textbf{Noticeable Delay (1 - 5 seconds)}:
+        \begin{itemize}
+            \item Loading spinner or progress indicator.
+            \item User should feel the task is being processed without major interruption.
+        \end{itemize}
+    \item \textbf{Short Wait (5 - 10 seconds)}:
+        \begin{itemize}
+            \item Clear, visible progress indicator (spinner or progress bar).
+            \item Maintain user engagement with subtle animations or loading text.
+        \end{itemize}
+    \item \textbf{Brief Processing (10 - 30 seconds)}:
+        \begin{itemize}
+            \item Progress bar with percentage or time estimate.
+            \item Option to cancel or navigate to other tasks while waiting.
+        \end{itemize}
+    \item \textbf{Extended Processing (30 seconds - 1 minute)}:
+        \begin{itemize}
+            \item Detailed progress bar with estimated time remaining.
+            \item Option to switch tasks or background the process, with notification upon completion.
+        \end{itemize}
+    \item \textbf{Heavy Processing (1 - 5 minutes)}:
+        \begin{itemize}
+            \item Progress bar, estimated time remaining, and background processing.
+            \item Notifications when complete, allowing users to multitask.
+        \end{itemize}
+    \item \textbf{Batch Processing (5 - 15 minutes)}:
+        \begin{itemize}
+            \item Ability to run tasks in the background with notifications.
+            \item Clear updates on task completion or intermediate progress.
+        \end{itemize}
+    \item \textbf{Very Long Tasks (15 minutes - 1 hour)}:
+        \begin{itemize}
+            \item Task scheduler or background processing.
+            \item Notifications upon completion and the option to check intermediate results.
+        \end{itemize}
+\end{itemize}
+
+\end{landscape}
+
 \section{Experiment Tracking using MLflow}
 In this section, we discuss the importance of experiment tracking and how using MLflow can lead to better organization and analysis of results. A methodical approach to tracking experiments ensures that all relevant data is captured, making it easier to reproduce results and draw meaningful conclusions.
 

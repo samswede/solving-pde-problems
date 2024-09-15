@@ -2,10 +2,29 @@ from juliacall import Main as jl
 import plotly.graph_objects as go
 import numpy as np
 import time
+from pydantic import BaseModel
+from typing import Literal
+
 # from utils.visualisation import create_gif
 
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+
+
+
+class AdvDispParams(BaseModel):
+    v: float = 0.10
+    DaxialA: float = 1e-2
+    DaxialB: float = 1e-4
+    DaxialC: float = 1e-10
+    L: float = 1.0
+    tf: float = 10.0
+    solver_name: Literal[
+        "Tsit5", "RK4", "Vern7", "DP5", "BS3",
+        "Rodas5", "TRBDF2", "KenCarp4",
+        "Euler", "ImplicitEuler", "Heun",
+    ] = "Tsit5"
+    num_elements: int = 1000
 
 def create_gif(solution_arrays, labels, filename='solution_animation.gif'):
     """
@@ -40,57 +59,33 @@ def create_gif(solution_arrays, labels, filename='solution_animation.gif'):
 jl.include("src/approaches/MoL/adv_disp.jl")
 
 if __name__ == "__main__":
-    v = 0.15
-    C_in = 1.0
-    Daxial = 1e-3
-    L = 1.0
-    tf = 10.0
+    params = AdvDispParams(
+        v=0.10,
+        DaxialA=1e-2,
+        DaxialB=1e-4,
+        DaxialC=1e-10,
+        L=1.0,
+        tf=10.0,
+        solver_name="Rodas5",
+        num_elements=200
+    )
 
-    # Choose which function to call
-    function_choice = "solve_adv_disp_3"  # Change this to "solve_adv_disp_2" or "solve_adv_disp_3" as needed
+    print("Starting pde solving...")
+    start_time = time.time()
+    
+    solution_array_A_julia, solution_array_B_julia, solution_array_C_julia = jl.solve_adv_disp_pulse(params.model_dump())
 
-    if function_choice in ["solve_adv_disp", "solve_adv_disp_2"]:
-        if function_choice == "solve_adv_disp":
-            solution_array = jl.solve_adv_disp(v, C_in, Daxial, L, tf).to_numpy()
-        else:
-            solution_array = jl.solve_adv_disp_2(v, Daxial, L, tf).to_numpy()
+    # convert julia arrays to numpy arrays
+    solution_array_A = solution_array_A_julia.to_numpy()
+    solution_array_B = solution_array_B_julia.to_numpy()
+    solution_array_C = solution_array_C_julia.to_numpy()
+    
+    end_time = time.time()
+    print(f"solve_adv_disp_3 completed in {end_time - start_time:.2f} seconds.")
 
-        # Plot the solution using Plotly
-        x = np.linspace(0, 1, solution_array.shape[1])
-        y = np.linspace(0, 10, solution_array.shape[0])
-        X, Y = np.meshgrid(x, y)
-
-        fig = go.Figure(data=[go.Surface(z=solution_array, x=X, y=Y)])
-
-        fig.update_layout(
-            title='Solution Array 3D Surface',
-            scene=dict(
-                xaxis_title='Z (Position)',
-                yaxis_title='T (Time)',
-                zaxis_title='C (Concentration)'
-            )
-        )
-
-        fig.show()
-
-    else:  # solve_adv_diff_3
-
-        print("Starting solve_adv_disp_3...")
-        start_time = time.time()
-        
-        solution_array_A_julia, solution_array_B_julia, solution_array_C_julia = jl.solve_adv_disp_3()
-
-        # convert julia arrays to numpy arrays
-        solution_array_A = solution_array_A_julia.to_numpy()
-        solution_array_B = solution_array_B_julia.to_numpy()
-        solution_array_C = solution_array_C_julia.to_numpy()
-        
-        end_time = time.time()
-        print(f"solve_adv_disp_3 completed in {end_time - start_time:.2f} seconds.")
-
-        # Create a .gif movie of the solutions
-        print("Creating .gif movies...")
-        create_gif([solution_array_A, solution_array_B, solution_array_C], 
-                   ['Solution A', 'Solution B', 'Solution C'], 
-                   'solutions.gif')
-        print("Created solutions.gif")
+    # Create a .gif movie of the solutions
+    print("Creating .gif movies...")
+    create_gif([solution_array_A, solution_array_B, solution_array_C], 
+                ['Solution A', 'Solution B', 'Solution C'], 
+                'solutions.gif')
+    print("Created solutions.gif")

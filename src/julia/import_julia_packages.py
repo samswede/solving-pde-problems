@@ -13,7 +13,9 @@ packages_to_include = [
     "MethodOfLines",
     "DomainSets",
     "ModelingToolkit",
-    "OrdinaryDiffEq"
+    "OrdinaryDiffEq",
+    "Interpolations",
+    "PyCall"
 
 ]
 

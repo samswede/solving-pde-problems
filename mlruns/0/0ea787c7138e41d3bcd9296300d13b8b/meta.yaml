@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/0ea787c7138e41d3bcd9296300d13b8b/artifacts
+end_time: 1726348736778
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0ea787c7138e41d3bcd9296300d13b8b
+run_name: receptive-squid-328
+run_uuid: 0ea787c7138e41d3bcd9296300d13b8b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726348735298
+status: 3
+tags: []
+user_id: samuelpmh

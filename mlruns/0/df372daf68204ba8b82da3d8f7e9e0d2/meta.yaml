@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/df372daf68204ba8b82da3d8f7e9e0d2/artifacts
+end_time: 1726346265478
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: df372daf68204ba8b82da3d8f7e9e0d2
+run_name: fearless-goose-277
+run_uuid: df372daf68204ba8b82da3d8f7e9e0d2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726346264071
+status: 3
+tags: []
+user_id: samuelpmh

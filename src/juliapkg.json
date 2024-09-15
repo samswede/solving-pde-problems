@@ -9,9 +9,17 @@
             "uuid": "0c46a032-eb83-5123-abaf-570d42b7fbaa",
             "version": "=7.14.0"
         },
+        "PyCall": {
+            "uuid": "438e738f-606a-5dbb-bf0a-cddfbfd45ab0",
+            "version": "=1.96.4"
+        },
         "DomainSets": {
             "uuid": "5b8099bc-c8ec-5219-889f-1d9e522a28bf",
             "version": "=0.7.14"
+        },
+        "Interpolations": {
+            "uuid": "a98d9a8b-a2ab-59e6-89dd-64a1c18fca59",
+            "version": "=0.15.1"
         },
         "OrdinaryDiffEq": {
             "uuid": "1dea7af3-3e70-54e6-95c3-0bf5283fa5ed",

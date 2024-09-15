@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/9dad39d732c8426b84f924c35c12c505/artifacts
+end_time: 1726340102555
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9dad39d732c8426b84f924c35c12c505
+run_name: bittersweet-lynx-884
+run_uuid: 9dad39d732c8426b84f924c35c12c505
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726340101170
+status: 3
+tags: []
+user_id: samuelpmh
