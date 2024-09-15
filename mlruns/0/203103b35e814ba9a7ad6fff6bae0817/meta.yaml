@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/203103b35e814ba9a7ad6fff6bae0817/artifacts
+end_time: 1726409578461
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 203103b35e814ba9a7ad6fff6bae0817
+run_name: bittersweet-stag-485
+run_uuid: 203103b35e814ba9a7ad6fff6bae0817
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726409578454
+status: 3
+tags: []
+user_id: samuelpmh

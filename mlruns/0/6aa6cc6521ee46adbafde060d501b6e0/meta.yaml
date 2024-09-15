@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/6aa6cc6521ee46adbafde060d501b6e0/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6aa6cc6521ee46adbafde060d501b6e0
+run_name: advection_diffusion_2_ScipySolver_BDF_grid_200
+run_uuid: 6aa6cc6521ee46adbafde060d501b6e0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726408096193
+status: 1
+tags: []
+user_id: samuelpmh

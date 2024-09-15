@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/342e5c01fc54491ea9279637684f9535/artifacts
+end_time: 1726409155514
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 342e5c01fc54491ea9279637684f9535
+run_name: unruly-sponge-892
+run_uuid: 342e5c01fc54491ea9279637684f9535
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726409154132
+status: 3
+tags: []
+user_id: samuelpmh

@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/samuelpmh/Code/work/solving-pde-problems/mlruns/0/7d8395a8d88d432390971271ffedcf7b/artifacts
+end_time: 1726410560883
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 7d8395a8d88d432390971271ffedcf7b
+run_name: thundering-horse-489
+run_uuid: 7d8395a8d88d432390971271ffedcf7b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1726410515557
+status: 3
+tags: []
+user_id: samuelpmh

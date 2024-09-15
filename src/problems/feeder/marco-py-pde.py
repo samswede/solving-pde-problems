@@ -11,9 +11,9 @@ from pde import (
 )
 import mlflow
 import time
-import optuna
-import multiprocessing
-import signal
+
+from utils.optuna_utils import run_optuna_study
+from utils.sweep_utils import parameter_sweep
 
 class FeederParams(BaseModel):
     A: float
@@ -139,64 +139,6 @@ class Feeder(PDEBase):
 
         return FieldCollection([dch_dt, dcc_dt, dL_dt, domega_dt])
 
-def log_feeder_metrics(eq, execution_time):
-    """Log feeder metrics to MLflow."""
-    mlflow.log_metric("final_ch", eq.ch.data.mean())
-    mlflow.log_metric("final_cc", eq.cc.data.mean())
-    mlflow.log_metric("final_L", eq.L.data.mean())
-    mlflow.log_metric("final_omega", eq.omega.data.mean())
-    mlflow.log_metric("execution_time", execution_time)
-
-def log_feeder_params(config):
-    """Log feeder parameters to MLflow."""
-    mlflow.log_params({
-        "grid_size": config["grid_size"],
-        "initial_conditions": config["initial_conditions"],
-        "feeder_params": config["feeder_params"],
-        "disturbance_params": config["disturbance_params"],
-        "solver_params": config["solver_params"]
-    })
-
-def run_with_timeout(config, method, timeout):
-    config["solver_params"]["method"] = method
-    run_name = f"advection_diffusion_2_{method}_grid_{config['grid_size']}_solver_{config['solver_params']['solver']}"
-    with mlflow.start_run(run_name=run_name, nested=True):
-        mlflow.set_tag("pde_package", "py-pde")
-        mlflow.log_param("solver_method", method)
-        mlflow.log_param("timeout", timeout)
-        mlflow.set_tag("parent_run", "advection_diffusion_2_parent")
-        mlflow.set_tag("child_run_index", method)
-        log_feeder_params(config)  # Log all parameters
-        start_time = time.time()
-        run(config)
-        end_time = time.time()
-        return end_time - start_time
-
-def target(queue, config, method, timeout):
-    execution_time = run_with_timeout(config, method, timeout)
-    queue.put(execution_time)
-
-def objective(trial, config):
-    method = trial.suggest_categorical("method", ["LSODA", "RK45", "RK23", "Radau", "BDF"])
-    timeout = 15  # Set a timeout to whatever is time to give up on a solver
-
-    queue = multiprocessing.Queue()
-    process = multiprocessing.Process(target=target, args=(queue, config, method, timeout))
-    process.start()
-    process.join(timeout)
-
-    if process.is_alive():
-        process.terminate()
-        process.join()
-        queue.close()
-        queue.join_thread()
-        return timeout  # Return timeout value if timeout occurs
-
-    result = queue.get()
-    queue.close()
-    queue.join_thread()
-    return result  # Return the execution time if successful
-
 def run(config):
     # Define the size of the grid and create it
     grid_size = config["grid_size"]
@@ -250,8 +192,26 @@ def run(config):
     # movie(storage, filename=output_filename, plot_args=dict(ylim=(-1.0, 2.5)))
     # mlflow.log_artifact(output_filename)
 
-if __name__ == "__main__":
-    # Configuration dictionary for hyperparameters
+def log_feeder_params(config):
+    """Log feeder parameters to MLflow."""
+    mlflow.log_params({
+        "grid_size": config["grid_size"],
+        "initial_conditions": config["initial_conditions"],
+        "feeder_params": config["feeder_params"],
+        "disturbance_params": config["disturbance_params"],
+        "solver_params": config["solver_params"]
+    })
+
+def log_feeder_metrics(eq, execution_time):
+    """Log feeder metrics to MLflow."""
+    mlflow.log_metric("final_ch", eq.ch.data.mean())
+    mlflow.log_metric("final_cc", eq.cc.data.mean())
+    mlflow.log_metric("final_L", eq.L.data.mean())
+    mlflow.log_metric("final_omega", eq.omega.data.mean())
+    mlflow.log_metric("execution_time", execution_time)
+
+def single_run():
+    # just config for a single run
     config = {
         "grid_size": 200,
         "initial_conditions": {
@@ -277,18 +237,103 @@ if __name__ == "__main__":
             "t_range": 1500.0,
             "dt": 0.01,
             "solver": "ScipySolver",
-            "method": "LSODA",
+            "method": "RK45",
         },
+        
         "output_filename": "output.gif",
     }
+    run(config)
 
-    # Create an Optuna study
-    study = optuna.create_study(direction="minimize")
-    study.optimize(lambda trial: objective(trial, config), n_trials=10)
 
-    # Log the best method found
-    best_method = study.best_params["method"]
-    mlflow.log_param("best_solver_method", best_method)
+def identify_best_method():
+    # Consolidated configuration dictionary for hyperparameters and Optuna study
+    optuna_config = {
+        "grid_size": 200,
+        "initial_conditions": {
+            "ch": 0.0,
+            "cc": 0.0,
+            "L": 0.5,
+            "vc": 0.001,
+            "omega": 200.0 / 60.0,
+            "error": 0.0,
+        },
+        "feeder_params": {
+            "A": np.pi * 0.2**2,
+            "Vc": 0.005,
+            "rho_bulk": 712.0,
+            "mass_flowrate_setpoint": 18.0,
+        },
+        "disturbance_params": {
+            "range": (15, 25),
+            "value": 1.0,
+            "kernel_size": 5,
+        },
+        "solver_params": {
+            "t_range": 1500.0,
+            "dt": 0.01,
+        },
+        "output_filename": "output.gif",
+        "solvers": {
+            "ScipySolver": {
+                "methods": ["LSODA", "RK45", "RK23", "Radau", "BDF"]
+            },
+            # "AnotherSolver": {
+            #     "methods": ["Method1", "Method2", "Method3"]
+            # }
+        },
+        "timeout": 10,  # Set a timeout to whatever is time to give up on a solver
+        "run_name_prefix": "advection_diffusion_2",
+        "pde_package": "py-pde",
+        "parent_run": "advection_diffusion_2_parent"
+    }
 
-    # Run the simulation with the best method
-    run_with_timeout(config, best_method, timeout=15)
+    # Run the Optuna study
+    run_optuna_study(optuna_config, run, log_feeder_params, n_trials=5)
+
+def main3():
+    optuna_config = {
+        "grid_size": 200,
+        "initial_conditions": {
+            "ch": 0.0,
+            "cc": 0.0,
+            "L": 0.5,
+            "vc": 0.001,
+            "omega": 200.0 / 60.0,
+            "error": 0.0,
+        },
+        "feeder_params": {
+            "A": np.pi * 0.2**2,
+            "Vc": 0.005,
+            "rho_bulk": 712.0,
+            "mass_flowrate_setpoint": 18.0,
+        },
+        "disturbance_params": {
+            "range": (15, 25),
+            "value": 1.0,
+            "kernel_size": 5,
+        },
+        "solver_params": {
+            "t_range": 1500.0,
+            "dt": 0.01,
+        },
+        "output_filename": "output.gif",
+        "solvers": {
+            "ScipySolver": {
+                "methods": ["LSODA", "RK45", "RK23", "Radau", "BDF"]
+            },
+            # "AnotherSolver": {
+            #     "methods": ["Method1", "Method2", "Method3"]
+            # }
+        },
+        "timeout": 10,  # Set a timeout to whatever is time to give up on a solver
+        "run_name_prefix": "advection_diffusion_2",
+        "pde_package": "py-pde",
+        "parent_run": "advection_diffusion_2_parent"
+    }
+
+    timeout = 10  # Example timeout value in seconds
+    parameter_sweep(optuna_config, run, log_feeder_params, timeout)
+
+if __name__ == "__main__":
+    # identify_best_method()  # Run this to do a study to find the best method
+    main3()  # Run this to perform the parameter sweep

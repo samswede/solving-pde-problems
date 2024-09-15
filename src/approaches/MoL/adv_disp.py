@@ -5,7 +5,7 @@ import time
 from pydantic import BaseModel
 from typing import Literal
 
-# from utils.visualisation import create_gif
+from utils.visualisation import create_gif
 
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -51,7 +51,8 @@ def create_gif(solution_arrays, labels, filename='solution_animation.gif'):
         return lines
 
     ani = FuncAnimation(fig, update, frames=range(solution_arrays[0].shape[0]), blit=True)
-    ani.save(filename, writer='imagemagick', fps=10)
+    # ani.save(filename, writer='imagemagick', fps=10)
+    ani.save(filename, writer='pillow', fps=10)
     plt.close()
 
 
